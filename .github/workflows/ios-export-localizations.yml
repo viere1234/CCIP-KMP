@@ -34,11 +34,11 @@ jobs:
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
 
-      - name: Build Shared XCFramework
+      - name: Build Shared framework
         run: |
-          ./gradlew :shared:assembleXCFramework
+          ./gradlew :shared:packForXcode
           mkdir -p iosApp/Frameworks
-          cp -R shared/build/XCFrameworks/release/Shared.xcframework iosApp/Frameworks/
+          cp -R shared/build/xcode-frameworks/Shared.framework iosApp/Frameworks/
 
       - name: Export XLIFF
         run: |
