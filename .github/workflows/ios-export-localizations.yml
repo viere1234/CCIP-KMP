@@ -34,14 +34,14 @@ jobs:
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
 
-      - name: Print
-        run: ./gradlew :shared:tasks --all
-
-      - name: Build Shared framework
+      - name: Build Shared.framework for simulator Debug
         run: |
-          ./gradlew :shared:packForXcode
-          mkdir -p iosApp/Frameworks
-          cp -R shared/build/xcode-frameworks/Shared.framework iosApp/Frameworks/
+          CONFIGURATION=Debug \
+          SDK_NAME=iphonesimulator \
+          ARCHS=arm64 \
+          TARGET_BUILD_DIR=$PWD/DerivedData/Build/Products/Debug-iphonesimulator \
+          FRAMEWORKS_FOLDER_PATH=OPass.app/Frameworks \
+          ./gradlew :shared:embedAndSignAppleFrameworkForXcode
 
       - name: Export XLIFF
         run: |
@@ -58,7 +58,7 @@ jobs:
       - name: Commit XLIFF to branch ios-xliff
         run: |
           git fetch origin ios-xliff || true
-          git checkout -B ios-xliff origin/ios-xliff || git checkout -B weblate-ios-xliff
+          git checkout -B ios-xliff origin/ios-xliff || git checkout -B ios-xliff
           cp -f *.xliff .
           git add *.xliff || true
           if ! git diff --cached --quiet; then
