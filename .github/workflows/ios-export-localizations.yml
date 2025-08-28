@@ -34,14 +34,12 @@ jobs:
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
 
-      - name: Build Shared.framework for simulator Debug
+      - name: Build Shared.framework
         run: |
-          CONFIGURATION=debug \
-          SDK_NAME=iphonesimulator \
-          ARCHS=arm64 \
-          TARGET_BUILD_DIR=$PWD/DerivedData/Build/Products/Debug-iphonesimulator \
-          FRAMEWORKS_FOLDER_PATH=OPass.app/Frameworks \
-          ./gradlew :shared:embedAndSignAppleFrameworkForXcode
+          ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
+          mkdir -p DerivedData/Build/Products/Debug-iphonesimulator/OPass.app/Frameworks
+          cp -R shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework \
+            DerivedData/Build/Products/Debug-iphonesimulator/OPass.app/Frameworks/
 
       - name: Export XLIFF
         run: |
