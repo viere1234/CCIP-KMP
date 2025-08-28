@@ -16,10 +16,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+          cache: gradle
+
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
 
-      - name: Export Apple XLIFF
+      - name: Export XLIFF
         run: |
           rm -rf LocalizationExport
           mkdir -p LocalizationExport
@@ -27,9 +34,6 @@ jobs:
             -project iosApp/OPass.xcodeproj \
             -scheme OPass \
             -localizationPath LocalizationExport
-
-      - name: Flatten XLIFF to repo root
-        run: |
           rm -f *.xliff
           find LocalizationExport -name "*.xliff" -print0 | xargs -0 -I{} cp "{}" .
 
