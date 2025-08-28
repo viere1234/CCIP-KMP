@@ -36,7 +36,7 @@ jobs:
 
       - name: Build Shared.framework for simulator Debug
         run: |
-          CONFIGURATION=Debug \
+          CONFIGURATION=debug \
           SDK_NAME=iphonesimulator \
           ARCHS=arm64 \
           TARGET_BUILD_DIR=$PWD/DerivedData/Build/Products/Debug-iphonesimulator \
