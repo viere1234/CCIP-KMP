@@ -34,6 +34,16 @@ jobs:
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
 
+      - name: Build
+        run: |
+          xcodebuild \
+            -project iosApp/OPass.xcodeproj \
+            -scheme OPass \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=latest" \
+            -quiet \
+            build
+
       - name: Export XLIFF
         run: |
           rm -rf LocalizationExport
@@ -45,7 +55,7 @@ jobs:
             -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=latest" \
             -localizationPath LocalizationExport \
             -exportLocalizations \
-            build
+            -quiet
           rm -f *.xliff
           find LocalizationExport -name "*.xliff" -print0 | xargs -0 -I{} cp "{}" .
 
