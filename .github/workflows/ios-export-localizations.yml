@@ -1,4 +1,7 @@
-name: Export iOS Localizations to XLIFF
+# SPDX-FileCopyrightText: 2025 OPass
+# SPDX-License-Identifier: GPL-3.0-only
+
+name: Export iOS Localizations
 on:
   push:
     branches: [main]
@@ -27,6 +30,9 @@ jobs:
           java-version: 21
           cache: gradle
 
+      - name: Build Shared XCFramework
+        run: ./gradlew :shared:embedAndSignAppleFrameworkForXcode
+
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
 
@@ -37,7 +43,6 @@ jobs:
           xcodebuild \
             -project iosApp/OPass.xcodeproj \
             -scheme OPass \
-            -configuration Debug \
             -localizationPath LocalizationExport \
             -exportLocalizations
           rm -f *.xliff
