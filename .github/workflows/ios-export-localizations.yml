@@ -7,6 +7,7 @@ on:
     branches: [main]
     paths:
       - 'iosApp/Supporting Files/Localizable.xcstrings'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -33,14 +34,11 @@ jobs:
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
 
-      - name: Build
+      - name: Build Shared XCFramework
         run: |
-          xcodebuild \
-            -project iosApp/OPass.xcodeproj \
-            -scheme OPass \
-            -configuration Debug \
-            -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=latest" \
-            build
+          ./gradlew :shared:assembleXCFramework
+          mkdir -p iosApp/Frameworks
+          cp -R shared/build/XCFrameworks/release/Shared.xcframework iosApp/Frameworks/
 
       - name: Export XLIFF
         run: |
