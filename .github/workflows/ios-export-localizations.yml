@@ -30,10 +30,12 @@ jobs:
         run: |
           rm -rf LocalizationExport
           mkdir -p LocalizationExport
-          xcodebuild -exportLocalizations \
+          xcodebuild \
             -project iosApp/OPass.xcodeproj \
             -scheme OPass \
-            -localizationPath LocalizationExport
+            -configuration Debug \
+            -localizationPath LocalizationExport \
+            -exportLocalizations
           rm -f *.xliff
           find LocalizationExport -name "*.xliff" -print0 | xargs -0 -I{} cp "{}" .
 
