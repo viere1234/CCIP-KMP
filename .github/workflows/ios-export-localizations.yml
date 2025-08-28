@@ -34,13 +34,6 @@ jobs:
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
 
-      - name: Build Shared.framework
-        run: |
-          ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
-          mkdir -p DerivedData/Build/Products/Debug-iphonesimulator/OPass.app/Frameworks
-          cp -R shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework \
-            DerivedData/Build/Products/Debug-iphonesimulator/OPass.app/Frameworks/
-
       - name: Export XLIFF
         run: |
           rm -rf LocalizationExport
@@ -48,8 +41,11 @@ jobs:
           xcodebuild \
             -project iosApp/OPass.xcodeproj \
             -scheme OPass \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=latest" \
             -localizationPath LocalizationExport \
-            -exportLocalizations
+            -exportLocalizations \
+            build
           rm -f *.xliff
           find LocalizationExport -name "*.xliff" -print0 | xargs -0 -I{} cp "{}" .
 
