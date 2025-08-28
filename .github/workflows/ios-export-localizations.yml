@@ -30,11 +30,17 @@ jobs:
           java-version: 21
           cache: gradle
 
-      - name: Build Shared XCFramework
-        run: ./gradlew :shared:embedAndSignAppleFrameworkForXcode
-
       - name: Select Xcode 16.4
         run: sudo xcode-select --switch /Applications/Xcode_16.4.app
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project iosApp/OPass.xcodeproj \
+            -scheme OPass \
+            -configuration Debug \
+            -destination "platform=iOS Simulator,name=iPhone 16 Pro Max,OS=latest" \
+            build
 
       - name: Export XLIFF
         run: |
